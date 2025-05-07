@@ -167,11 +167,30 @@ ipcMain.handle('removeNotes', async (event, paths) => {
   });
 });
 
-// 搜尋筆記
+// 搜尋筆記 單條件
+// ipcMain.handle('searchNotes', (e, keyword) => {
+//   return new Promise((resolve, reject) => {
+//     const like = `%${keyword}%`;
+//     db.all(`SELECT * FROM notes WHERE title LIKE ? OR filename LIKE ? OR tags LIKE ? OR category LIKE ? OR keywords LIKE ?`, [like, like, like, like, like], (err, rows) => {
+//       if (err) reject(err);
+//       else resolve(rows);
+//     });
+//   });
+// });
+
+// 搜尋筆記 多條件
 ipcMain.handle('searchNotes', (e, keyword) => {
   return new Promise((resolve, reject) => {
-    const like = `%${keyword}%`;
-    db.all(`SELECT * FROM notes WHERE title LIKE ? OR filename LIKE ? OR tags LIKE ? OR category LIKE ? OR keywords LIKE ?`, [like, like, like, like, like], (err, rows) => {
+    const terms = keyword.trim().split(/\s+/); // 依空白切割
+    const likeConditions = terms.map(() => `(title LIKE ? OR filename LIKE ? OR tags LIKE ? OR category LIKE ? OR keywords LIKE ?)`).join(' AND ');
+    const likeValues = terms.reduce((acc, term) => {
+      acc.push(`%${term}%`, `%${term}%`, `%${term}%`, `%${term}%`, `%${term}%`);
+      return acc;
+    }, []);
+
+    const sql = `SELECT * FROM notes WHERE ${likeConditions}`;
+
+    db.all(sql, likeValues, (err, rows) => {
       if (err) reject(err);
       else resolve(rows);
     });
