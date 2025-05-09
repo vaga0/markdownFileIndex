@@ -112,3 +112,13 @@ keywords: [express, middleware]
     
 
 * * *
+
+Screenshot
+-------
+* normal Seach
+
+![](document/01%20-%20search.png)
+
+
+* Fuzzy Multi-Keyword Search
+![](document/02%20-%20deep%20search.png)
