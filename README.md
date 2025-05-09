@@ -1,6 +1,8 @@
 Markdown Indexer
 ================
 
+![](document/00%20-%20open.png)
+
 📁 一款跨平台 (Windows/macOS) 的桌面應用，讓你快速整理與查詢本機的 Markdown (.md) 檔案。
 
 * * *
